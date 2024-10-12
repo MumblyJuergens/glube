@@ -3,9 +3,9 @@
 #include <functional>
 #include <catch2/catch_test_macros.hpp>
 #include <glube/Attributes.hpp>
-#include <glube/nameof.hpp>
 #include <glm/vec3.hpp>
 #include <mj/lambda.hpp>
+#include <mj/nameof.hpp>
 #include "fakegl.hpp"
 
 TEST_CASE("Attributes type decoding", "[attributes]")
@@ -116,70 +116,4 @@ TEST_CASE("Attributes stride decoding", "[attributes]")
     REQUIRE(stride_ == 24);
     attributes.Add(program, buffer, nameof(Vector::normal), &Vector::normal);
     REQUIRE(stride_ == 24);
-}
-
-TEST_CASE("nameof with struct type", "[nameof]")
-{
-    struct a
-    {
-        int b;
-    };
-    constexpr auto value = nameof(a::b);
-    REQUIRE(std::string{value} == "b");
-}
-
-TEST_CASE("nameof with fundamental object", "[nameof]")
-{
-    [[maybe_unused]] int b;
-    constexpr auto value = nameof(b);
-    REQUIRE(std::string{value} == "b");
-}
-
-TEST_CASE("nameof with fundamental type", "[nameof]")
-{
-    constexpr auto value = nameof(int);
-    REQUIRE(std::string{value} == "int");
-}
-
-TEST_CASE("nameof with member dereference", "[nameof]")
-{
-    struct a
-    {
-        int b;
-    };
-    [[maybe_unused]] a c;
-
-    constexpr auto value = nameof(c.b);
-    REQUIRE(std::string{value} == "b");
-}
-
-TEST_CASE("nameof with pointer dereference", "[nameof]")
-{
-    struct a
-    {
-        int b;
-    };
-    [[maybe_unused]] a e;
-    [[maybe_unused]] a *c = &e;
-
-    constexpr auto value = nameof(c->b);
-    REQUIRE(std::string{value} == "b");
-}
-
-TEST_CASE("nameofanything with namespace", "[nameof]")
-{
-    constexpr auto value = nameofanything(glube);
-    REQUIRE(std::string{value} == "glube");
-}
-
-TEST_CASE("nameof with member function", "[nameof]")
-{
-    struct a
-    {
-        int b();
-    };
-    [[maybe_unused]] a c;
-
-    constexpr auto value = nameof(&a::b);
-    REQUIRE(std::string{value} == "b");
 }

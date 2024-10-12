@@ -4,7 +4,6 @@
 #include "glube/Buffer.hpp"
 #include "glube/Context.hpp"
 #include "glube/keys.hpp"
-#include "glube/nameof.hpp"
 #include "glube/Pool.hpp"
 #include "glube/Program.hpp"
 #include "glube/Shader.hpp"
