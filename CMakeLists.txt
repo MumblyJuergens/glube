@@ -20,7 +20,6 @@ add_library(glube STATIC
 "include/glube/Context.hpp"
 "include/glube/glube.hpp"
 "include/glube/keys.hpp"
-"include/glube/Pool.hpp"
 "include/glube/Program.hpp"
 "include/glube/Shader.hpp"
 "include/glube/Window.hpp"

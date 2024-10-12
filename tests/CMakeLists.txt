@@ -3,7 +3,6 @@ CPMAddPackage("gh:catchorg/Catch2@3.7.1")
 
 add_executable(glube_tests
 "fakegl.hpp"
-"pooltests.cpp"
 "tests.cpp"
 )
 target_compile_features(glube_tests PUBLIC cxx_std_23)
