@@ -1,6 +1,5 @@
-include(FetchContent)
-FetchContent_Declare(Catch2 GIT_REPOSITORY "https://github.com/catchorg/Catch2.git" GIT_TAG "devel")
-FetchContent_MakeAvailable(Catch2)
+
+CPMAddPackage("gh:catchorg/Catch2@3.7.1")
 
 add_executable(glube_tests
 "fakegl.hpp"
@@ -12,6 +11,5 @@ target_link_libraries(glube_tests PUBLIC glube Catch2::Catch2WithMain)
 target_compile_options(glube_tests PUBLIC ${glubecxxflags})
 
 # list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
-include(CTest)
-include(Catch)
-catch_discover_tests(glube_tests)
+enable_testing()
+add_test(glube_tests glube_tests)

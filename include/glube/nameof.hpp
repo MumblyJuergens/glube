@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string_view>
-#include <ctre.hpp>
 
 #define nameof(x) glube::internal::_nameof(#x, sizeof(x))
 #define nameofanything(x) glube::internal::_nameof(#x, 0)

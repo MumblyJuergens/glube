@@ -1,13 +1,12 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.29)
 
 project(glube LANGUAGES C CXX)
 
-include(FetchContent)
-FetchContent_Declare(glfw GIT_REPOSITORY "https://github.com/glfw/glfw.git" GIT_TAG "master")
-FetchContent_Declare(glm GIT_REPOSITORY "https://github.com/g-truc/glm.git" GIT_TAG "master")
-FetchContent_Declare(ctre GIT_REPOSITORY "https://github.com/hanickadot/compile-time-regular-expressions.git" GIT_TAG "main")
+option(GLUBE_BUILD_TESTS "Build tests for glube")
 
-FetchContent_MakeAvailable(glfw glm ctre)
+include("cmake/CPM.cmake")
+CPMAddPackage("gh:glfw/glfw#3.4")
+CPMAddPackage("gh:g-truc/glm#1.0.1")
 
 if (MSVC)
     set(glubecxxflags ${glubecxxflags}
@@ -68,11 +67,14 @@ else()
 endif()
 
 add_subdirectory("glad" SYSTEM)
-add_subdirectory("tests")
+
+if(${GLUBE_BUILD_TESTS})
+    add_subdirectory("tests")
+endif()
 
 add_library(glube)
 target_compile_features(glube PUBLIC cxx_std_23)
-target_link_libraries(glube PUBLIC glad glfw glm::glm ctre::ctre)
+target_link_libraries(glube PUBLIC glad glfw glm::glm)
 target_compile_options(glube PUBLIC ${glubecxxflags})
 target_include_directories(glube PUBLIC "include")
 target_sources(glube PUBLIC
