@@ -4,8 +4,8 @@
 #include <catch2/catch_test_macros.hpp>
 #include <glube/Attributes.hpp>
 #include <glube/nameof.hpp>
-#include <glube/callable.hpp>
 #include <glm/vec3.hpp>
+#include <mj/lambda.hpp>
 #include "fakegl.hpp"
 
 TEST_CASE("Attributes type decoding", "[attributes]")
@@ -15,7 +15,7 @@ TEST_CASE("Attributes type decoding", "[attributes]")
     glube::Buffer buffer;
     glube::Attributes attributes;
     GLenum type_{};
-    glVertexArrayAttribFormat = glube::callableToPointer(
+    glVertexArrayAttribFormat = mj::capturing_lambda_pointer(
         [&]([[maybe_unused]] GLuint vaobj, [[maybe_unused]] GLuint attribindex, [[maybe_unused]] GLint size, [[maybe_unused]] GLenum type, [[maybe_unused]] GLboolean normalized, [[maybe_unused]] GLuint relativeoffset)
         {
             type_ = type;
@@ -43,7 +43,7 @@ TEST_CASE("Attributes size decoding", "[attributes]")
     glube::Buffer buffer;
     glube::Attributes attributes;
     GLint size_{};
-    glVertexArrayAttribFormat = glube::callableToPointer(
+    glVertexArrayAttribFormat = mj::capturing_lambda_pointer(
         [&]([[maybe_unused]] GLuint vaobj, [[maybe_unused]] GLuint attribindex, [[maybe_unused]] GLint size, [[maybe_unused]] GLenum type, [[maybe_unused]] GLboolean normalized, [[maybe_unused]] GLuint relativeoffset)
         {
             size_ = size;
@@ -71,7 +71,7 @@ TEST_CASE("Attributes offset decoding", "[attributes]")
     glube::Buffer buffer;
     glube::Attributes attributes;
     GLuint offset_{};
-    glVertexArrayAttribFormat = glube::callableToPointer(
+    glVertexArrayAttribFormat = mj::capturing_lambda_pointer(
         [&]([[maybe_unused]] GLuint vaobj, [[maybe_unused]] GLuint attribindex, [[maybe_unused]] GLint size, [[maybe_unused]] GLenum type, [[maybe_unused]] GLboolean normalized, [[maybe_unused]] GLuint relativeoffset)
         {
             offset_ = relativeoffset;
@@ -99,7 +99,7 @@ TEST_CASE("Attributes stride decoding", "[attributes]")
     glube::Buffer buffer;
     glube::Attributes attributes;
     GLsizei stride_{};
-    glVertexArrayVertexBuffer = glube::callableToPointer(
+    glVertexArrayVertexBuffer = mj::capturing_lambda_pointer(
         [&]([[maybe_unused]] GLuint vaobj, [[maybe_unused]] GLuint bindingindex, [[maybe_unused]] GLuint buffer, [[maybe_unused]] GLintptr offset, [[maybe_unused]] GLsizei stride)
         {
             stride_ = stride;

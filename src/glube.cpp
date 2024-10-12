@@ -2,7 +2,6 @@
 #include "glube/glube.hpp"
 #include "glube/Attributes.hpp"
 #include "glube/Buffer.hpp"
-#include "glube/callable.hpp"
 #include "glube/Context.hpp"
 #include "glube/keys.hpp"
 #include "glube/nameof.hpp"
