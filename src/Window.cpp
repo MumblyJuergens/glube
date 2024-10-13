@@ -37,11 +37,11 @@ namespace glube
         if (me->keyEventHandler)
         {
             me->keyEventHandler({
-                me,
-                static_cast<Key>(key),
-                static_cast<KeyMod>(mods),
-                static_cast<KeyAction>(action),
-                scancode,
+                .window = me,
+                .key = static_cast<Key>(key),
+                .mod = static_cast<KeyMod>(mods),
+                .action = static_cast<KeyAction>(action),
+                .scancode = scancode,
             });
         }
     }
@@ -55,6 +55,7 @@ namespace glube
         glfwWindowHint(GLFW_CONTEXT_DEBUG, GLFW_TRUE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
         window = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
+        glfwSetInputMode(window, GLFW_LOCK_KEY_MODS, GLFW_TRUE);
         glfwSetKeyCallback(window, key_callback);
         glfwSetWindowUserPointer(window, this);
         glfwMakeContextCurrent(window);
