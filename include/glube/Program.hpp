@@ -9,7 +9,7 @@
 namespace glube
 {
     template <typename... T>
-    concept shader_stand_in = (std::is_same_v<Shader, T> && ...);
+    concept ShaderClass = (std::is_same_v<Shader, T> && ...);
 
     class [[nodiscard]] Program final
     {
@@ -18,13 +18,13 @@ namespace glube
         void attachRecursive() {}
         void detachRecursive() {}
 
-        void attachRecursive(shader_stand_in auto &shader, shader_stand_in auto &...shaders)
+        void attachRecursive(const ShaderClass auto &shader, const ShaderClass auto &...shaders)
         {
             glAttachShader(inner, *shader);
             attachRecursive(shaders...);
         }
 
-        void detachRecursive(shader_stand_in auto &shader, shader_stand_in auto &...shaders)
+        void detachRecursive(const ShaderClass auto &shader, const ShaderClass auto &...shaders)
         {
             glDetachShader(inner, *shader);
             detachRecursive(shaders...);
@@ -36,7 +36,7 @@ namespace glube
         {
             Shader vert(ShaderType::Vertex, vertexSource);
             Shader frag(ShaderType::Fragment, fragmentSource);
-            AddShaders(vert, frag);
+            add_shaders(vert, frag);
         }
         ~Program() { glDeleteProgram(inner); }
         [[nodiscard]] Program(Program &&other) noexcept : inner{std::exchange(other.inner, 0)} {}
@@ -47,10 +47,10 @@ namespace glube
         }
         Program(const Program &) = delete;
         Program &operator=(const Program &) = delete;
-        [[nodiscard]] GLuint operator*() const { return inner; }
-        void Activate() const { glUseProgram(inner); }
+        [[nodiscard]] GLuint operator*() const noexcept { return inner; }
+        void activate() const { glUseProgram(inner); }
 
-        void AddShaders(shader_stand_in auto &...shaders)
+        void add_shaders(const ShaderClass auto &...shaders)
         {
             attachRecursive(shaders...);
             glLinkProgram(inner);
@@ -67,9 +67,9 @@ namespace glube
             detachRecursive(shaders...);
         }
 
-        void SetUniform(const std::string_view name, const glm::mat4 &matrix)
+        void set_uniform(const std::string_view name, const glm::mat4 &matrix)
         {
-            Activate();
+            activate();
             const auto location = glGetUniformLocation(inner, name.data());
             glUniformMatrix4fv(location, 1, false, glm::value_ptr(matrix));
         }
