@@ -7,7 +7,7 @@ namespace glube
 {
     enum class BufferStorageFlags : GLbitfield
     {
-        DynamicStorage = GL_DYNAMIC_STORAGE_BIT,
+        dynamic_storage = GL_DYNAMIC_STORAGE_BIT,
     };
 
     constexpr BufferStorageFlags operator&(BufferStorageFlags a, BufferStorageFlags b) { return BufferStorageFlags(std::to_underlying(a) & std::to_underlying(b)); }
@@ -21,10 +21,10 @@ namespace glube
 
     public:
         [[nodiscard]] Buffer() { glCreateBuffers(1, &inner); }
-        [[nodiscard]] Buffer(std::size_t size, const void *const data = nullptr, BufferStorageFlags flags = BufferStorageFlags::DynamicStorage)
+        [[nodiscard]] Buffer(std::size_t size, const void *const data = nullptr, BufferStorageFlags flags = BufferStorageFlags::dynamic_storage)
             : Buffer()
         {
-            InitStorage(size, data, flags);
+            init(size, data, flags);
         }
         ~Buffer() { glDeleteBuffers(1, &inner); }
         [[nodiscard]] Buffer(Buffer &&other) noexcept : inner{std::exchange(other.inner, 0)} {}
@@ -35,14 +35,14 @@ namespace glube
         }
         Buffer(const Buffer &) = delete;
         Buffer &operator=(const Buffer &) = delete;
-        [[nodiscard]] GLuint operator*() const { return inner; }
+        [[nodiscard]] GLuint operator*() const noexcept { return inner; }
 
-        void InitStorage(std::size_t size, const void *const data = nullptr, BufferStorageFlags flags = BufferStorageFlags::DynamicStorage)
+        void init(std::size_t size, const void *const data = nullptr, BufferStorageFlags flags = BufferStorageFlags::dynamic_storage)
         {
             glNamedBufferStorage(inner, size, data, std::to_underlying(flags));
         }
 
-        void Overwrite(const std::size_t size, const void *const data, const int offset = 0)
+        void overwrite(const std::size_t size, const void *const data, const int offset = 0)
         {
             glNamedBufferSubData(inner, offset, size, data);
         }
