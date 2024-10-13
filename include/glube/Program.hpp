@@ -34,8 +34,8 @@ namespace glube
         [[nodiscard]] Program() { inner = glCreateProgram(); }
         [[nodiscard]] Program(const std::string_view vertexSource, const std::string_view fragmentSource) : Program()
         {
-            Shader vert(ShaderType::Vertex, vertexSource);
-            Shader frag(ShaderType::Fragment, fragmentSource);
+            Shader vert(ShaderType::vertex, vertexSource);
+            Shader frag(ShaderType::fragment, fragmentSource);
             add_shaders(vert, frag);
         }
         ~Program() { glDeleteProgram(inner); }

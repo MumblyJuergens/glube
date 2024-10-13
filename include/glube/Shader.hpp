@@ -7,8 +7,8 @@ namespace glube
 {
     enum class ShaderType : GLenum
     {
-        Vertex = GL_VERTEX_SHADER,
-        Fragment = GL_FRAGMENT_SHADER,
+        vertex = GL_VERTEX_SHADER,
+        fragment = GL_FRAGMENT_SHADER,
     };
 
     class [[nodiscard]] Shader final
@@ -17,7 +17,7 @@ namespace glube
 
     public:
         [[nodiscard]] Shader(const ShaderType type) { inner = glCreateShader(std::to_underlying(type)); }
-        [[nodiscard]] Shader(const ShaderType type, const std::string_view source) : Shader(type) { AddSource(source); }
+        [[nodiscard]] Shader(const ShaderType type, const std::string_view source) : Shader(type) { set_source(source); }
         ~Shader() { glDeleteShader(inner); }
         [[nodiscard]] Shader(Shader &&other) noexcept : inner{std::exchange(other.inner, 0)} {}
         Shader &operator=(Shader &&other) noexcept
@@ -27,9 +27,9 @@ namespace glube
         }
         Shader(const Shader &) = delete;
         Shader &operator=(const Shader &) = delete;
-        [[nodiscard]] GLuint operator*() const { return inner; }
+        [[nodiscard]] GLuint operator*() const noexcept { return inner; }
 
-        void AddSource(const std::string_view source)
+        void set_source(const std::string_view source)
         {
             const char *wrapper[] = {source.data()};
             glShaderSource(inner, 1, wrapper, nullptr);
