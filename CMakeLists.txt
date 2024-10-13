@@ -12,7 +12,6 @@ CPMAddPackage("gh:MumblyJuergens/mj#main")
 add_subdirectory("glad" SYSTEM)
 
 set(glube_src
-"src/Context.cpp"
 "src/glube.cpp"
 "src/Window.cpp"
 )
