@@ -11,10 +11,12 @@ CPMAddPackage("gh:MumblyJuergens/mj#main")
 
 add_subdirectory("glad" SYSTEM)
 
-add_library(glube STATIC 
+set(glube_src
 "src/Context.cpp"
 "src/glube.cpp"
 "src/Window.cpp"
+)
+set(glube_headers
 "include/glube/Attributes.hpp"
 "include/glube/Buffer.hpp"
 "include/glube/Context.hpp"
@@ -24,10 +26,11 @@ add_library(glube STATIC
 "include/glube/Shader.hpp"
 "include/glube/Window.hpp"
 )
+add_library(glube ${glube_src} ${glube_headers})
 target_compile_features(glube PUBLIC cxx_std_23)
 target_link_libraries(glube PUBLIC glad glfw glm::glm mj::mj)
 MJFullCompilerWarnings(glube)
-target_include_directories(glube PUBLIC "include")
+MJLibrarySetup(glube INCLUDE_DIR "include" EXPORT_HEADER_PREFIX "glube/glube" HEADERS ${glube_headers})
 
 if(${GLUBE_BUILD_TESTS} OR PROJECT_IS_TOP_LEVEL)
     add_subdirectory("tests")

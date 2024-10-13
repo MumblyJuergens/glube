@@ -28,11 +28,11 @@ TEST_CASE("Attributes type decoding", "[attributes]")
         int color;
     };
 
-    attributes.Add(program, buffer, nameof(Vector::position), &Vector::position);
+    attributes.add(program, buffer, nameof(Vector::position), &Vector::position);
     REQUIRE(type_ == GL_FLOAT);
-    attributes.Add(program, buffer, nameof(Vector::normal), &Vector::normal);
+    attributes.add(program, buffer, nameof(Vector::normal), &Vector::normal);
     REQUIRE(type_ == GL_FLOAT);
-    attributes.Add(program, buffer, nameof(Vector::color), &Vector::color);
+    attributes.add(program, buffer, nameof(Vector::color), &Vector::color);
     REQUIRE(type_ == GL_INT);
 }
 
@@ -56,11 +56,11 @@ TEST_CASE("Attributes size decoding", "[attributes]")
         int color;
     };
 
-    attributes.Add(program, buffer, nameof(Vector::position), &Vector::position);
+    attributes.add(program, buffer, nameof(Vector::position), &Vector::position);
     REQUIRE(size_ == 3);
-    attributes.Add(program, buffer, nameof(Vector::normal), &Vector::normal);
+    attributes.add(program, buffer, nameof(Vector::normal), &Vector::normal);
     REQUIRE(size_ == 2);
-    attributes.Add(program, buffer, nameof(Vector::color), &Vector::color);
+    attributes.add(program, buffer, nameof(Vector::color), &Vector::color);
     REQUIRE(size_ == 1);
 }
 
@@ -84,11 +84,11 @@ TEST_CASE("Attributes offset decoding", "[attributes]")
         int color;
     };
 
-    attributes.Add(program, buffer, nameof(Vector::position), &Vector::position);
+    attributes.add(program, buffer, nameof(Vector::position), &Vector::position);
     REQUIRE(offset_ == 0);
-    attributes.Add(program, buffer, nameof(Vector::normal), &Vector::normal);
+    attributes.add(program, buffer, nameof(Vector::normal), &Vector::normal);
     REQUIRE(offset_ == 12);
-    attributes.Add(program, buffer, nameof(Vector::color), &Vector::color);
+    attributes.add(program, buffer, nameof(Vector::color), &Vector::color);
     REQUIRE(offset_ == 20);
 }
 
@@ -112,8 +112,8 @@ TEST_CASE("Attributes stride decoding", "[attributes]")
         int color;
     };
 
-    attributes.Add(program, buffer, nameof(Vector::position), &Vector::position);
+    attributes.add(program, buffer, nameof(Vector::position), &Vector::position);
     REQUIRE(stride_ == 24);
-    attributes.Add(program, buffer, nameof(Vector::normal), &Vector::normal);
+    attributes.add(program, buffer, nameof(Vector::normal), &Vector::normal);
     REQUIRE(stride_ == 24);
 }
