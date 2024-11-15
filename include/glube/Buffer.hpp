@@ -39,7 +39,7 @@ namespace glube
 
         void init(std::size_t size, const void *const data = nullptr, BufferStorageFlags flags = BufferStorageFlags::dynamic_storage)
         {
-            glNamedBufferStorage(inner, size, data, std::to_underlying(flags));
+            glNamedBufferData(inner, size, data, std::to_underlying(flags));
         }
 
         void overwrite(const std::size_t size, const void *const data, const int offset = 0)
