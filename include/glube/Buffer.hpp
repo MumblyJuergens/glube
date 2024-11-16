@@ -5,15 +5,20 @@
 
 namespace glube
 {
-    enum class BufferStorageFlags : GLbitfield
-    {
-        dynamic_storage = GL_DYNAMIC_STORAGE_BIT,
-    };
+    // enum class BufferStorageFlags : GLbitfield
+    // {
+    //     dynamic_storage = GL_DYNAMIC_STORAGE_BIT,
+    // };
 
-    constexpr BufferStorageFlags operator&(BufferStorageFlags a, BufferStorageFlags b) { return BufferStorageFlags(std::to_underlying(a) & std::to_underlying(b)); }
-    constexpr BufferStorageFlags operator|(BufferStorageFlags a, BufferStorageFlags b) { return BufferStorageFlags(std::to_underlying(a) | std::to_underlying(b)); }
-    constexpr BufferStorageFlags operator^(BufferStorageFlags a, BufferStorageFlags b) { return BufferStorageFlags(std::to_underlying(a) ^ std::to_underlying(b)); }
-    constexpr BufferStorageFlags operator~(BufferStorageFlags a) { return BufferStorageFlags(~std::to_underlying(a)); }
+    // constexpr BufferStorageFlags operator&(BufferStorageFlags a, BufferStorageFlags b) { return BufferStorageFlags(std::to_underlying(a) & std::to_underlying(b)); }
+    // constexpr BufferStorageFlags operator|(BufferStorageFlags a, BufferStorageFlags b) { return BufferStorageFlags(std::to_underlying(a) | std::to_underlying(b)); }
+    // constexpr BufferStorageFlags operator^(BufferStorageFlags a, BufferStorageFlags b) { return BufferStorageFlags(std::to_underlying(a) ^ std::to_underlying(b)); }
+    // constexpr BufferStorageFlags operator~(BufferStorageFlags a) { return BufferStorageFlags(~std::to_underlying(a)); }
+
+    enum class BufferDataUsage : GLenum
+    {
+        dynamic_draw = GL_DYNAMIC_DRAW,
+    };
 
     class [[nodiscard]] Buffer final
     {
@@ -21,10 +26,10 @@ namespace glube
 
     public:
         [[nodiscard]] Buffer() { glCreateBuffers(1, &inner); }
-        [[nodiscard]] Buffer(std::size_t size, const void *const data = nullptr, BufferStorageFlags flags = BufferStorageFlags::dynamic_storage)
+        [[nodiscard]] Buffer(std::size_t size, const void *const data = nullptr, BufferDataUsage usage = BufferDataUsage::dynamic_draw)
             : Buffer()
         {
-            init(size, data, flags);
+            init(size, data, usage);
         }
         ~Buffer() { glDeleteBuffers(1, &inner); }
         [[nodiscard]] Buffer(Buffer &&other) noexcept : inner{std::exchange(other.inner, 0)} {}
@@ -37,9 +42,9 @@ namespace glube
         Buffer &operator=(const Buffer &) = delete;
         [[nodiscard]] GLuint operator*() const noexcept { return inner; }
 
-        void init(std::size_t size, const void *const data = nullptr, BufferStorageFlags flags = BufferStorageFlags::dynamic_storage)
+        void init(std::size_t size, const void *const data = nullptr, BufferDataUsage usage = BufferDataUsage::dynamic_draw)
         {
-            glNamedBufferData(inner, size, data, std::to_underlying(flags));
+            glNamedBufferData(inner, size, data, std::to_underlying(usage));
         }
 
         void overwrite(const std::size_t size, const void *const data, const int offset = 0)
