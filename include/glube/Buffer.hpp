@@ -17,6 +17,7 @@ namespace glube
 
     enum class BufferDataUsage : GLenum
     {
+        none,
         dynamic_draw = GL_DYNAMIC_DRAW,
     };
 
@@ -24,15 +25,15 @@ namespace glube
     {
         GLuint inner;
 
-    public:
+        public:
         [[nodiscard]] Buffer() { glCreateBuffers(1, &inner); }
-        [[nodiscard]] Buffer(std::size_t size, const void *const data = nullptr, BufferDataUsage usage = BufferDataUsage::dynamic_draw)
+        [[nodiscard]] Buffer(const std::size_t size, const void *const data = nullptr, const BufferDataUsage usage = BufferDataUsage::dynamic_draw)
             : Buffer()
         {
             init(size, data, usage);
         }
         ~Buffer() { glDeleteBuffers(1, &inner); }
-        [[nodiscard]] Buffer(Buffer &&other) noexcept : inner{std::exchange(other.inner, 0)} {}
+        [[nodiscard]] Buffer(Buffer &&other) noexcept : inner{ std::exchange(other.inner, 0) } {}
         Buffer &operator=(Buffer &&other) noexcept
         {
             inner = std::exchange(other.inner, 0);
@@ -42,7 +43,7 @@ namespace glube
         Buffer &operator=(const Buffer &) = delete;
         [[nodiscard]] GLuint operator*() const noexcept { return inner; }
 
-        void init(std::size_t size, const void *const data = nullptr, BufferDataUsage usage = BufferDataUsage::dynamic_draw)
+        void init(const std::size_t size, const void *const data = nullptr, const BufferDataUsage usage = BufferDataUsage::dynamic_draw)
         {
             glNamedBufferData(inner, size, data, std::to_underlying(usage));
         }
@@ -52,5 +53,10 @@ namespace glube
             glNamedBufferSubData(inner, offset, size, data);
         }
     };
+
+    static_assert(!std::is_copy_assignable_v<Buffer>);
+    static_assert(!std::is_copy_constructible_v<Buffer>);
+    static_assert(std::is_move_assignable_v<Buffer>);
+    static_assert(std::is_move_constructible_v<Buffer>);
 
 } // End namespace glube.

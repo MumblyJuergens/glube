@@ -8,12 +8,12 @@ namespace glube
 {
     class [[nodiscard]] Context final
     {
-    public:
+        public:
         [[nodiscard]] Context()
         {
             if (!glfwInit())
             {
-                throw std::runtime_error{"Could not initialise context"};
+                throw std::runtime_error{ "Could not initialise context" };
             }
         };
         [[nodiscard]] Context(Context &&other) noexcept = default;
@@ -22,4 +22,10 @@ namespace glube
         Context &operator=(const Context &) = delete;
         ~Context() { glfwTerminate(); }
     };
+
+    static_assert(!std::is_copy_assignable_v<Context>);
+    static_assert(!std::is_copy_constructible_v<Context>);
+    static_assert(std::is_move_assignable_v<Context>);
+    static_assert(std::is_move_constructible_v<Context>);
+
 } // End namespace glube.

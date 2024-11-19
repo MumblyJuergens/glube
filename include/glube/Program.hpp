@@ -30,7 +30,7 @@ namespace glube
             detachRecursive(shaders...);
         }
 
-    public:
+        public:
         [[nodiscard]] Program() { inner = glCreateProgram(); }
         [[nodiscard]] Program(const std::string_view vertexSource, const std::string_view fragmentSource) : Program()
         {
@@ -39,7 +39,7 @@ namespace glube
             add_shaders(vert, frag);
         }
         ~Program() { glDeleteProgram(inner); }
-        [[nodiscard]] Program(Program &&other) noexcept : inner{std::exchange(other.inner, 0)} {}
+        [[nodiscard]] Program(Program &&other) noexcept : inner{ std::exchange(other.inner, 0) } {}
         Program &operator=(Program &&other) noexcept
         {
             inner = std::exchange(other.inner, 0);
@@ -62,17 +62,31 @@ namespace glube
                 glGetProgramiv(inner, GL_INFO_LOG_LENGTH, &maxLength);
                 std::string infoLog(static_cast<std::size_t>(maxLength), '\0');
                 glGetProgramInfoLog(inner, maxLength, &maxLength, infoLog.data());
-                throw std::runtime_error{infoLog};
+                throw std::runtime_error{ infoLog };
             }
             detachRecursive(shaders...);
         }
 
         void set_uniform(const std::string_view name, const glm::mat4 &matrix)
         {
-            activate();
             const auto location = glGetUniformLocation(inner, name.data());
-            glUniformMatrix4fv(location, 1, false, glm::value_ptr(matrix));
+            glProgramUniformMatrix4fv(inner, location, 1, false, glm::value_ptr(matrix));
+        }
+        void set_uniform(const std::string_view name, const int value)
+        {
+            const auto location = glGetUniformLocation(inner, name.data());
+            glProgramUniform1i(inner, location, value);
+        }
+        void set_uniform(const std::string_view name, const glm::vec3 value)
+        {
+            const auto location = glGetUniformLocation(inner, name.data());
+            glProgramUniform3fv(inner, location, 1, glm::value_ptr(value));
         }
     };
+
+    static_assert(!std::is_copy_assignable_v<Program>);
+    static_assert(!std::is_copy_constructible_v<Program>);
+    static_assert(std::is_move_assignable_v<Program>);
+    static_assert(std::is_move_constructible_v<Program>);
 
 } // End namespace glube.

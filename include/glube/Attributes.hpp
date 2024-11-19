@@ -24,9 +24,9 @@ namespace glube
         // Can't auto-detect... yet...
         fixed_point = GL_FIXED,
         float16 = GL_HALF_FLOAT,
-        int32_2_10_10_10 = GL_INT_2_10_10_10_REV,
-        uint32_2_10_10_10 = GL_UNSIGNED_INT_2_10_10_10_REV,
-        uint32_10F_11F_11F = GL_UNSIGNED_INT_10F_11F_11F_REV,
+        int32_2_10_10_10_rev = GL_INT_2_10_10_10_REV,
+        uint32_2_10_10_10_rev = GL_UNSIGNED_INT_2_10_10_10_REV,
+        uint32_10F_11F_11F_rev = GL_UNSIGNED_INT_10F_11F_11F_REV,
     };
 
     struct [[nodiscard]] AttributeConfig final
@@ -44,7 +44,7 @@ namespace glube
         GLuint vao{};
 
         template <typename T>
-        constexpr AttributeType infer_gl_type()
+        static constexpr AttributeType infer_gl_type()
         {
             using X = std::remove_all_extents_t<std::remove_cvref_t<T>>;
             if constexpr (sizeof(X) == 1)
@@ -67,7 +67,7 @@ namespace glube
             else if constexpr (requires(T t) { t.x; })
                 return infer_gl_type<decltype(T::x)>();
             else
-                throw std::invalid_argument{"Can't infer OpenGL type, please specify explicitly"};
+                throw std::invalid_argument{ "Can't infer OpenGL type, please specify explicitly" };
         }
 
         template <typename T>
@@ -80,13 +80,13 @@ namespace glube
             else if constexpr (std::is_bounded_array_v<T>)
                 return sizeof(T) / sizeof(*static_cast<T>(0));
             else
-                throw std::invalid_argument{"Can't infer type size, please specify explicitly"};
+                throw std::invalid_argument{ "Can't infer type size, please specify explicitly" };
         }
 
-    public:
+        public:
         [[nodiscard]] Attributes() { glCreateVertexArrays(1, &vao); }
         ~Attributes() { glDeleteVertexArrays(1, &vao); }
-        [[nodiscard]] Attributes(Attributes &&other) noexcept : vao{std::exchange(other.vao, 0)} {}
+        [[nodiscard]] Attributes(Attributes &&other) noexcept : vao{ std::exchange(other.vao, 0) } {}
         Attributes &operator=(Attributes &&other) noexcept
         {
             vao = std::exchange(other.vao, 0);
@@ -99,7 +99,7 @@ namespace glube
         void activate() const { glBindVertexArray(vao); }
 
         template <typename T, typename U>
-        void add(const Program &program, const Buffer &buffer, std::string_view name, U T::*u, const AttributeConfig &cfg = {})
+        void add(const Program &program, const Buffer &buffer, std::string_view name, U T:: *u, const AttributeConfig &cfg = {})
         {
             const T *t = nullptr;
             const auto offset = static_cast<GLsizei>(reinterpret_cast<std::size_t>(&(t->*u)));
@@ -112,6 +112,16 @@ namespace glube
             glVertexArrayAttribBinding(vao, location, 0);
             glVertexArrayBindingDivisor(vao, cfg.binding_index, cfg.divisor);
         }
+
+        void set_element_buffer(const Buffer &buffer)
+        {
+            glVertexArrayElementBuffer(vao, *buffer);
+        }
     };
+
+    static_assert(!std::is_copy_assignable_v<Attributes>);
+    static_assert(!std::is_copy_constructible_v<Attributes>);
+    static_assert(std::is_move_assignable_v<Attributes>);
+    static_assert(std::is_move_constructible_v<Attributes>);
 
 } // End of namespace glube.

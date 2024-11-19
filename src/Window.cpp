@@ -27,7 +27,19 @@ namespace glube
                 .mod = static_cast<KeyMod>(mods),
                 .action = static_cast<KeyAction>(action),
                 .scancode = scancode,
-            });
+                });
+        }
+    }
+
+    GLUBE_EXPORT void Window::size_callback(GLFWwindow *window, int width, int height)
+    {
+        Window *me = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
+        if (me->sizeEventHandler)
+        {
+            me->sizeEventHandler({
+                .window = me,
+                .size = {width, height},
+                });
         }
     }
 
@@ -41,8 +53,9 @@ namespace glube
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
         window = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
         glfwSetInputMode(window, GLFW_LOCK_KEY_MODS, GLFW_TRUE);
-        glfwSetKeyCallback(window, key_callback);
         glfwSetWindowUserPointer(window, this);
+        glfwSetKeyCallback(window, key_callback);
+        glfwSetWindowSizeCallback(window, size_callback);
         glfwMakeContextCurrent(window);
         gladLoadGL(glfwGetProcAddress);
         glEnable(GL_DEBUG_OUTPUT);
