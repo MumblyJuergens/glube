@@ -109,7 +109,7 @@ namespace glube
             glVertexArrayVertexBuffer(vao, cfg.binding_index, *buffer, cfg.buffer_offset, sizeof(T));
             glEnableVertexArrayAttrib(vao, location);
             glVertexArrayAttribFormat(vao, location, asize, std::to_underlying(atype), cfg.normalize, offset);
-            glVertexArrayAttribBinding(vao, location, 0);
+            glVertexArrayAttribBinding(vao, location, cfg.binding_index);
             glVertexArrayBindingDivisor(vao, cfg.binding_index, cfg.divisor);
         }
 
