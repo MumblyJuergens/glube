@@ -25,6 +25,7 @@ set(glube_headers
 "include/glube/AutoBuffer.hpp"
 "include/glube/BitmapText.hpp"
 "include/glube/Buffer.hpp"
+"include/glube/BuildingBuffer.hpp"
 "include/glube/Context.hpp"
 "include/glube/glube.hpp"
 "include/glube/keys.hpp"
