@@ -17,6 +17,7 @@ add_subdirectory("glad" SYSTEM)
 
 set(glube_src
 "src/glube.cpp"
+"src/utilities.cpp"
 "src/Window.cpp"
 )
 set(glube_headers
@@ -31,6 +32,7 @@ set(glube_headers
 "include/glube/Sampler.hpp"
 "include/glube/Shader.hpp"
 "include/glube/Texture.hpp"
+"include/glube/utilities.hpp"
 "include/glube/Window.hpp"
 "${CMAKE_CURRENT_BINARY_DIR}/include/glube/glube_export.h"
 )

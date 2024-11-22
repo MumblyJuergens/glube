@@ -4,8 +4,8 @@
 #include <type_traits>
 #include <string_view>
 #include <glad/gl.h>
-#include "Buffer.hpp"
-#include "Program.hpp"
+#include "glube/Buffer.hpp"
+#include "glube/Program.hpp"
 
 namespace glube
 {
