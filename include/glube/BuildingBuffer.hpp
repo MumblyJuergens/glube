@@ -15,6 +15,8 @@ namespace glube
 
         public:
 
+        using value_type = std::vector<T>::value_type;
+
         void reserve(const std::size_t capacity) { m_data.reserve(capacity); }
 
         void push_back(const T &value) { m_data.push_back(value); }
