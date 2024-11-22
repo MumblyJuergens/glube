@@ -32,7 +32,10 @@ namespace glube
         void set_and_clear() { set(); clear(); }
 
         template<typename Self>
-        auto &buffer(this Self &&self) noexcept { return self.m_buffer; }
+        auto &buffer(this Self &&self) noexcept { return self.m_buffer.buffer(); }
+
+        template<typename Self>
+        auto &vector(this Self &&self) noexcept { return self.m_data; }
 
     };
 
