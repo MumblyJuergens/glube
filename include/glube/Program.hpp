@@ -77,6 +77,11 @@ namespace glube
             const auto location = glGetUniformLocation(inner, name.data());
             glProgramUniform1i(inner, location, value);
         }
+        void set_uniform(const std::string_view name, const float value)
+        {
+            const auto location = glGetUniformLocation(inner, name.data());
+            glProgramUniform1f(inner, location, value);
+        }
         void set_uniform(const std::string_view name, const glm::vec3 value)
         {
             const auto location = glGetUniformLocation(inner, name.data());
