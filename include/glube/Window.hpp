@@ -66,8 +66,8 @@ namespace glube
 
         void swap_interval(const bool minimum) { glfwSwapInterval(minimum); }
 
-        void set_key_event_handler(KeyEventHandler *handler) noexcept { keyEventHandler = handler; }
-        void set_size_handler(SizeEventHandler *handler) noexcept { sizeEventHandler = handler; }
+        void set_key_event_handler(std::function<KeyEventHandler> handler) noexcept { keyEventHandler = handler; }
+        void set_size_handler(std::function<SizeEventHandler> handler) noexcept { sizeEventHandler = handler; }
 
         [[nodiscard]] bool should_close() const { return glfwWindowShouldClose(window); }
         void set_should_close(const bool value) { glfwSetWindowShouldClose(window, value); }
