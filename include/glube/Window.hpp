@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <string_view>
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
@@ -22,8 +23,8 @@ namespace glube
     {
         Context Context;
         GLFWwindow *window{};
-        KeyEventHandler *keyEventHandler{};
-        SizeEventHandler *sizeEventHandler{};
+        std::function<KeyEventHandler> keyEventHandler{};
+        std::function<SizeEventHandler> sizeEventHandler{};
         void *userPointer{};
 
         GLUBE_EXPORT static void error_callback(int error, const char *description);
