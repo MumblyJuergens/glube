@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <gsl/narrow>
 #include "glube/AutoBuffer.hpp"
 
 namespace glube
@@ -32,6 +33,7 @@ namespace glube
 
         auto size() const noexcept { return m_data.size(); }
         auto size_set() const noexcept { return m_size_set; }
+        auto isize_set() const noexcept { return gsl::narrow<GLsizei>(m_size_set); }
 
         void set() { m_size_set = size(); m_buffer.set(size() * sizeof(T), m_data.data()); }
         void set_and_clear() { set(); clear(); }
