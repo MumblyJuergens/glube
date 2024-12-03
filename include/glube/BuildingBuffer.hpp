@@ -25,6 +25,9 @@ namespace glube
         template<typename... Args>
         auto emplace_back(Args&&... args) { return m_data.emplace_back(std::forward<Args>(args)...); }
 
+        template<typename Range>
+        void append_range(Range &&range) { m_data.append_range(std::forward<Range>(range)); }
+
         void clear() { m_data.clear(); }
 
         auto size() const noexcept { return m_data.size(); }
@@ -34,10 +37,10 @@ namespace glube
         void set_and_clear() { set(); clear(); }
 
         template<typename Self>
-        auto &buffer(this Self &&self) noexcept { return self.m_buffer.buffer(); }
+        [[nodiscard]] auto &buffer(this Self &&self) noexcept { return self.m_buffer.buffer(); }
 
         template<typename Self>
-        auto &vector(this Self &&self) noexcept { return self.m_data; }
+        [[nodiscard]] auto &vector(this Self &&self) noexcept { return self.m_data; }
 
     };
 
